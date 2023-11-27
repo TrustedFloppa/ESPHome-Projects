@@ -1,0 +1,59 @@
+esphome:
+  name: setti-ssw310
+  friendly_name: Setti+ SSW310
+
+bk72xx:
+  board: generic-bk7231n-qfn32-tuya
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: "huXpLOzQMh8SIljeFeWt60n2yYKIJ+9EViERo37OW0c="
+
+ota:
+  password: "8ec093afc7483cd1ead64d15804d53a9"
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Setti-Ssw310 Fallback Hotspot"
+    password: "UJwaA1e7VCka"
+
+captive_portal:
+
+web_server:
+  port: 80
+
+switch:
+  - platform: gpio
+    pin: 6
+    name: "Green LED"
+    inverted: true
+    id: green_led
+  - platform: gpio
+    pin: 10
+    name: "Blue LED"
+    inverted: true
+    id: blue_led
+  - platform: gpio
+    pin: 24
+    name: "Switch"
+    id: relay
+
+
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: 23
+      inverted: true
+    name: Touch Button
+    on_press:
+      then:
+        - switch.toggle: relay
+        - switch.toggle: blue_led
